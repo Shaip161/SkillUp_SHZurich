@@ -18,12 +18,14 @@ _STAGE_ENRICHMENT_TEMPLATE = PromptTemplate.from_text(
     "stage_enrichment",
     """
 TASK:
-STAGE_ENRICHMENT_TASK
+You are an expert career-transition curriculum designer. Rewrite the learner-facing content for one fixed learning stage so it teaches SUBSKILL_NAME (part of SKILL_NAME) to this specific learner. Ground every explanation in the learner's prior experience: draw an explicit analogy from their previous roles, tasks, tools, or workflows in the USER_PROFILE to the demands of the TARGET_ROLE. Keep the content concrete, operational, and employability-oriented.
 
 RULES:
-- Keep the curriculum structure fixed.
-- Do not invent new stage types or change stage order.
-- Return only JSON with keys: instructions, context, expected_output, metadata.
+- Keep the curriculum structure fixed: do not invent new stage types, rename the stage, or change stage order.
+- Only enrich the content of the given STAGE; preserve its stage_type and pedagogical intent.
+- Use the learner's background for analogies; if no relevant background exists, stay concrete and practical without inventing experience.
+- Write "instructions" as clear, motivating, learner-facing text for this stage.
+- Return ONLY a single JSON object, with no markdown fences and no text before or after it, with exactly these keys: instructions (string), context (object), expected_output (object), metadata (object).
 
 USER_PROFILE:
 {{USER_PROFILE}}
@@ -65,12 +67,14 @@ _CONCEPTUAL_EVALUATION_TEMPLATE = PromptTemplate.from_text(
     "conceptual_evaluation",
     """
 TASK:
-CONCEPTUAL_EVALUATION_TASK
+You are a rigorous but supportive conceptual examiner for a career-transition learning program. Judge whether the learner's SUBMISSION demonstrates genuine conceptual understanding of the subskill described in the STAGE. Score against the stage's rubric and expected concepts, not against surface wording. Detect misconceptions and give feedback the learner can act on, connecting it to their background in PROFILE_CONTEXT where helpful.
 
 RULES:
-- Evaluate conceptual reasoning against the rubric and expected concepts.
-- Return only JSON with keys: conceptual_score, misconceptions, feedback, passed.
+- Evaluate conceptual reasoning against the rubric and expected concepts found in the STAGE.
+- Reward correct reasoning and concept transfer; penalize memorized or superficial answers.
 - conceptual_score must be a number between 0 and 1.
+- "passed" must reflect whether the learner meets the conceptual mastery bar with no critical misconception.
+- Return ONLY a single JSON object, with no markdown fences or surrounding text, with exactly these keys: conceptual_score (number 0-1), misconceptions (array of strings), feedback (string), passed (boolean).
 
 STAGE:
 {{STAGE}}
@@ -87,13 +91,15 @@ _PRACTICAL_EVALUATION_TEMPLATE = PromptTemplate.from_text(
     "practical_evaluation",
     """
 TASK:
-PRACTICAL_EVALUATION_TASK
+You are evaluating a practical, operational exercise in a career-transition learning program. Judge whether the learner's SUBMISSION correctly applies the subskill to a realistic workflow task as specified in the STAGE (its required elements, expected outcomes, and workflow steps). Prefer deterministic judgment where the expected result is explicit, and identify concrete execution errors.
 
 RULES:
-- Evaluate practical execution against the required elements and expected outcomes.
+- Evaluate practical execution against the required elements and expected outcomes found in the STAGE.
 - Prefer deterministic judgment where the answer is explicit.
-- Return only JSON with keys: practical_score, errors, feedback, passed.
+- Credit correct, usable execution (trigger, steps, decision points, safeguards); flag missing or incorrect required elements as errors.
 - practical_score must be a number between 0 and 1.
+- "passed" must reflect operational competence, not just effort.
+- Return ONLY a single JSON object, with no markdown fences or surrounding text, with exactly these keys: practical_score (number 0-1), errors (array of strings), feedback (string), passed (boolean).
 
 STAGE:
 {{STAGE}}
@@ -107,12 +113,14 @@ _FINAL_AGGREGATION_TEMPLATE = PromptTemplate.from_text(
     "final_aggregation",
     """
 TASK:
-FINAL_AGGREGATION_TASK
+You are the final mastery judge for a subskill in a career-transition learning program. Combine the CONCEPTUAL_RESULT and the PRACTICAL_RESULT with the learner's FINAL_SUBMISSION into a single mastery decision for the subskill described in the STAGE. A learner masters the subskill only when both conceptual understanding and practical execution are sound and no critical misconception remains.
 
 RULES:
-- Aggregate the conceptual and practical results into a final mastery judgment.
-- Return only JSON with keys: final_score, passed, critical_misconceptions, retry_required, feedback.
+- Aggregate the conceptual and practical results into a final mastery judgment; do not excuse a weak component because the other is strong.
 - final_score must be a number between 0 and 1.
+- List any misconception serious enough to block mastery in critical_misconceptions.
+- Set retry_required to true whenever the learner has not yet mastered the subskill.
+- Return ONLY a single JSON object, with no markdown fences or surrounding text, with exactly these keys: final_score (number 0-1), passed (boolean), critical_misconceptions (array of strings), retry_required (boolean), feedback (string).
 
 STAGE:
 {{STAGE}}
@@ -132,11 +140,14 @@ _REMEDIATION_TEMPLATE = PromptTemplate.from_text(
     "remediation",
     """
 TASK:
-REMEDIATION_TASK
+You are a remediation coach in a career-transition learning program. The learner failed the final evaluation captured in EVALUATION. Produce targeted remediation that fixes the specific mistakes: name the main errors, explain the correct reasoning clearly, and design one focused reinforcement task that rebuilds the weak area. Use the learner's background in PROFILE_CONTEXT to make the reinforcement task concrete and relevant.
 
 RULES:
-- Generate targeted remediation from the actual mistakes and score profile.
-- Return only JSON with keys: main_errors, correct_reasoning, reinforcement_task, retry_focus.
+- Generate targeted remediation from the actual mistakes and score profile in EVALUATION, not generic advice.
+- correct_reasoning must directly address why the learner's approach was wrong and what correct reasoning looks like.
+- reinforcement_task must be a single, concrete, doable exercise focused on the failed concepts.
+- retry_focus must list the specific concepts or skills the retry should target.
+- Return ONLY a single JSON object, with no markdown fences or surrounding text, with exactly these keys: main_errors (array of strings), correct_reasoning (string), reinforcement_task (string), retry_focus (array of strings).
 
 STAGE:
 {{STAGE}}

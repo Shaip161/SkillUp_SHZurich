@@ -1,0 +1,18 @@
+{
+  "user_id": "11111111-1111-1111-1111-111111111111",
+  "name": "Mia Keller",
+  "current_role": "Operations Coordinator",
+  "seniority": "mid",
+  "years_experience": 4,
+  "location": "Zurich, CH",
+  "industry_background": "Logistics & supply chain operations",
+  "skills": [
+    "Excel",
+    "Stakeholder communication",
+    "Process documentation",
+    "Email",
+    "Scheduling"
+  ],
+  "languages": ["English", "German"],
+  "raw_text": "Operations Coordinator with 4 years in logistics. Owns weekly scheduling, vendor email threads, and process documentation in Excel. Looking to move into a data-driven operations analyst role."
+}

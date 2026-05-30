@@ -1,36 +1,32 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { Providers } from './providers'
+import { SiteHeader } from '@/components/shell/SiteHeader'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' })
+const display = Space_Grotesk({ subsets: ['latin'], variable: '--font-display', display: 'swap' })
+const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })
 
 export const metadata: Metadata = {
   title: {
-    default: 'TransitionAI — Job matching for Switzerland',
-    template: '%s | TransitionAI',
+    default: 'AscendAI — Career Evolution OS',
+    template: '%s · AscendAI',
   },
   description:
-    'Upload your CV and instantly see which Swiss IT, Engineering and Finance jobs match your skills — and exactly what to learn to close the gap.',
+    'An AI-native operating system for career evolution: match to aspirational roles, then evolve into them through a personalized, adaptive learning journey.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0f1e]/80 backdrop-blur">
-          <div className="mx-auto flex h-14 max-w-6xl items-center px-4">
-            <a href="/" className="flex flex-col leading-none">
-              <span className="text-lg font-bold tracking-tight">
-                Transition<span className="text-teal-400">AI</span>
-              </span>
-              <span className="text-[10px] uppercase tracking-widest text-white/35">
-                Switzerland&nbsp;·&nbsp;IT&nbsp;·&nbsp;Engineering&nbsp;·&nbsp;Finance
-              </span>
-            </a>
-          </div>
-        </header>
-
-        <main className="mx-auto max-w-6xl px-4 py-10">{children}</main>
+    <html lang="en" className={`${inter.variable} ${display.variable} ${mono.variable}`}>
+      <body className="font-sans antialiased">
+        <div className="ambient-bg" />
+        <div className="ambient-grid" />
+        <Providers>
+          <SiteHeader />
+          <main className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 sm:px-6">{children}</main>
+        </Providers>
       </body>
     </html>
   )

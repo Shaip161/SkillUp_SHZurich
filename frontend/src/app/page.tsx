@@ -1,159 +1,78 @@
 'use client'
 
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, FileText, Loader2, Upload } from 'lucide-react'
-import { uploadCV } from '@/lib/api'
-import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { ArrowRight, Sparkles, Compass, Network, Trophy } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { Reveal, Stagger, StaggerItem } from '@/components/ui/motion'
+import { useSession } from '@/lib/store/session'
 
-const STEPS = [
-  { n: 1, label: 'Upload CV' },
-  { n: 2, label: 'Get matches' },
-  { n: 3, label: 'Close the gap' },
+const PILLARS = [
+  { icon: Compass, title: 'Match', body: 'See the roles you could grow into — ranked by real compatibility, not keywords.' },
+  { icon: Network, title: 'Generate', body: 'An AI composes a personalized evolution path from your exact skill gaps.' },
+  { icon: Trophy, title: 'Evolve', body: 'Progress through adaptive stages until the future role is genuinely yours.' },
 ]
 
-export default function HomePage() {
+export default function LandingPage() {
   const router = useRouter()
-  const [file, setFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const onDrop = useCallback((accepted: File[]) => {
-    if (accepted[0]) {
-      setFile(accepted[0])
-      setError(null)
-    }
-  }, [])
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-    },
-    multiple: false,
-    disabled: loading,
-  })
-
-  async function handleSubmit() {
-    if (!file || loading) return
-    setLoading(true)
-    setError(null)
-    try {
-      const result = await uploadCV(file)
-      sessionStorage.setItem('matchResponse', JSON.stringify(result))
-      router.push('/matches')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
-      setLoading(false)
-    }
-  }
+  const { session } = useSession()
+  const start = () => router.push(session ? '/upload' : '/login')
 
   return (
-    <div className="flex flex-col items-center gap-14 py-16">
+    <div className="flex flex-col items-center">
+      {/* Hero */}
+      <section className="relative w-full pt-16 sm:pt-24">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3.5 py-1.5 text-xs font-medium text-primary-200"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Your career, intelligently evolved
+          </motion.span>
 
-      {/* ── Hero ── */}
-      <div className="max-w-2xl space-y-4 text-center">
-        <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          Find your next role in{' '}
-          <span style={{ color: '#5DCAA5' }}>Switzerland</span>
-        </h1>
-        <p className="text-lg leading-relaxed text-white/60">
-          Upload your CV and instantly see which Swiss jobs match your skills&nbsp;—
-          and exactly what to learn to close the gap.
-        </p>
-      </div>
+          <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl">
+            Become the next
+            <br />
+            <span className="text-gradient">version of yourself.</span>
+          </h1>
 
-      {/* ── Upload card ── */}
-      <div className="w-full max-w-lg space-y-3">
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/55">
+            Not a course catalog. An AI operating system that maps the distance between who you are
+            today and the role you want — then closes it, step by step.
+          </p>
 
-        {/* Drop zone */}
-        <div
-          {...getRootProps()}
-          className={cn(
-            'cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center transition-colors',
-            isDragActive
-              ? 'border-teal-400 bg-teal-400/5'
-              : file
-              ? 'border-teal-500/50 bg-teal-500/5'
-              : 'border-white/20 hover:border-white/40 hover:bg-white/5',
-            loading && 'pointer-events-none opacity-50',
-          )}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center gap-3">
-            {file ? (
-              <>
-                <FileText className="h-10 w-10 text-teal-400" />
-                <div>
-                  <p className="font-medium text-white">{file.name}</p>
-                  <p className="mt-0.5 text-sm text-white/40">Click or drag to replace</p>
-                </div>
-              </>
-            ) : (
-              <>
-                <Upload className="h-10 w-10 text-white/30" />
-                <div>
-                  <p className="font-medium text-white">
-                    {isDragActive ? 'Drop your CV here' : 'Drag & drop your CV here'}
-                  </p>
-                  <p className="mt-0.5 text-sm text-white/40">PDF or DOCX</p>
-                </div>
-              </>
-            )}
+          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button size="lg" onClick={start} className="group">
+              Begin your evolution
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <Button size="lg" variant="ghost" onClick={() => router.push('/login')}>
+              I already have an account
+            </Button>
           </div>
-        </div>
+        </Reveal>
 
-        {/* Error banner */}
-        {error && (
-          <div className="flex items-center justify-between rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-            <p className="text-sm text-red-300">{error}</p>
-            <button
-              onClick={() => { setError(null); setFile(null) }}
-              className="ml-4 shrink-0 text-sm font-medium text-red-300 underline hover:text-red-200"
-            >
-              Try again
-            </button>
-          </div>
-        )}
+        {/* Ambient orbit visual */}
+        <div className="pointer-events-none mx-auto mt-16 h-px max-w-2xl bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      </section>
 
-        {/* Submit */}
-        <button
-          onClick={handleSubmit}
-          disabled={!file || loading}
-          className={cn(
-            'flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold transition-all',
-            'bg-teal-500 text-white hover:bg-teal-400 active:scale-[0.98]',
-            'disabled:cursor-not-allowed disabled:opacity-40',
-          )}
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Analysing your CV…
-            </>
-          ) : (
-            'Find matching jobs'
-          )}
-        </button>
-      </div>
-
-      {/* ── Steps ── */}
-      <div className="flex items-center gap-3 text-sm text-white/50">
-        {STEPS.flatMap((step, i) => [
-          <div key={step.n} className="flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs font-semibold text-white/70">
-              {step.n}
+      {/* Pillars */}
+      <Stagger className="mt-16 grid w-full max-w-5xl gap-4 sm:grid-cols-3" stagger={0.1}>
+        {PILLARS.map(({ icon: Icon, title, body }) => (
+          <StaggerItem
+            key={title}
+            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-primary/30"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 ring-1 ring-white/10">
+              <Icon className="h-5 w-5 text-primary" />
             </span>
-            <span>{step.label}</span>
-          </div>,
-          i < STEPS.length - 1 ? (
-            <ArrowRight key={`a${i}`} className="h-4 w-4 shrink-0 text-white/20" />
-          ) : null,
-        ])}
-      </div>
-
+            <h3 className="mt-4 font-display text-lg font-semibold">{title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-white/50">{body}</p>
+          </StaggerItem>
+        ))}
+      </Stagger>
     </div>
   )
 }

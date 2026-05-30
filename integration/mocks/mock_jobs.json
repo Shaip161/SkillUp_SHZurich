@@ -1,0 +1,48 @@
+[
+  {
+    "adzuna_id": "adz-1001",
+    "title": "Operations Analyst",
+    "company": "NordLogix AG",
+    "location": "Zurich, CH",
+    "category": "Logistics",
+    "seniority": "mid",
+    "required_skills": [
+      "Workflow automation",
+      "Dashboard reporting",
+      "Vendor coordination",
+      "Excel"
+    ],
+    "redirect_url": "https://example.com/jobs/adz-1001",
+    "description": "Own operational dashboards, automate recurring workflows, and coordinate vendors."
+  },
+  {
+    "adzuna_id": "adz-1002",
+    "title": "Process Operations Analyst",
+    "company": "HelvetiaOps",
+    "location": "Zug, CH",
+    "category": "Operations",
+    "seniority": "mid",
+    "required_skills": [
+      "Workflow automation",
+      "Dashboard reporting",
+      "Kubernetes"
+    ],
+    "redirect_url": "https://example.com/jobs/adz-1002",
+    "description": "Drive process automation and reporting for the operations team."
+  },
+  {
+    "adzuna_id": "adz-1003",
+    "title": "Supply Chain Operations Specialist",
+    "company": "AlpTransit Co",
+    "location": "Bern, CH",
+    "category": "Supply Chain",
+    "seniority": "mid",
+    "required_skills": [
+      "Vendor coordination",
+      "Workflow automation",
+      "Stakeholder communication"
+    ],
+    "redirect_url": "https://example.com/jobs/adz-1003",
+    "description": "Coordinate vendors and automate supply chain workflows."
+  }
+]
