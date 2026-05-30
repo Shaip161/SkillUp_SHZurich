@@ -1,0 +1,4 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+Agentic_learning_git_backup/
