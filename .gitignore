@@ -32,3 +32,43 @@ celerybeat-schedule
 celerybeat.pid
 
 CLAUDE_CODE_BRIEF.md
+CLAUDE.md
+
+__pycache__/
+.pytest_cache/
+*.pyc
+Agentic_learning_git_backup/
+.env
+.env.*
+!.env.example
+*.local
+.dockerignore
+frontend/Dockerfile
+
+Agentic_learning/.env
+Agentic_learning/.env.*
+!Agentic_learning/.env.example
+Agentic_learning/frontend/.env
+Agentic_learning/frontend/.env.*
+!Agentic_learning/frontend/.env.example
+Agentic_learning/.transitionai/
+
+# Integration layer generated artifacts
+integration/integration_trace.json
+integration/.curricula_demo/
+
+# Secrets and machine-local credentials
+.envrc
+.envrc.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+*.keystore
+*service-account*.json
+*credentials*.json
+*.npmrc
+*.pypirc
