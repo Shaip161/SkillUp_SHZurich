@@ -32,4 +32,3 @@ celerybeat-schedule
 celerybeat.pid
 
 CLAUDE_CODE_BRIEF.md
-CLAUDE.md

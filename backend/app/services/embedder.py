@@ -55,16 +55,22 @@ def build_job_embedding_input(
     title: str,
     seniority: str,
     required_skills: list[str],
-    description: str,
+    embedding_summary: str = "",
 ) -> str:
     skills_str = ", ".join(required_skills)
-    return f"{title} | {seniority} | Skills: {skills_str} | {description[:500]}"
+    parts = [f"{title} | {seniority} | Skills: {skills_str}"]
+    if embedding_summary:
+        parts.append(embedding_summary[:150])
+    return " | ".join(parts)
 
 
 def build_cv_embedding_input(
     seniority: str,
     skills: list[str],
-    cv_text: str,
+    embedding_summary: str = "",
 ) -> str:
     skills_str = ", ".join(skills)
-    return f"{seniority} professional | Skills: {skills_str} | {cv_text[:500]}"
+    parts = [f"{seniority} professional | Skills: {skills_str}"]
+    if embedding_summary:
+        parts.append(embedding_summary[:150])
+    return " | ".join(parts)

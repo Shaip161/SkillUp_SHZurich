@@ -56,11 +56,12 @@ async def match_cv(
     )
     seniority = extracted.get("seniority", "unknown")
     languages = extracted.get("languages", [])
+    embedding_summary = extracted.get("embedding_summary", "")
 
     # --- Embed ---
     try:
         embedding = await embed_text(
-            build_cv_embedding_input(seniority, all_skills, cv_text),
+            build_cv_embedding_input(seniority, all_skills, embedding_summary),
             task_type="retrieval_query",
         )
     except Exception as exc:

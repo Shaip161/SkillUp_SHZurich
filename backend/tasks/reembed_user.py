@@ -37,7 +37,7 @@ async def _reembed_user_async(user_id: str) -> None:
             embedding_text = build_cv_embedding_input(
                 seniority=profile.seniority or "unknown",
                 skills=profile.skills or [],
-                cv_text=profile.cv_text or "",
+                embedding_summary=(profile.cv_text or "")[:150],
             )
             profile.embedding = await embed_text(embedding_text, task_type="retrieval_query")
             await session.commit()
