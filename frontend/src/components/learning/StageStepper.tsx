@@ -35,7 +35,7 @@ export function StageStepper({
                 className={cn(
                   'grid h-7 w-7 place-items-center rounded-full text-[11px] font-semibold transition-colors',
                   done
-                    ? 'bg-primary text-base-950'
+                    ? 'bg-primary text-white'
                     : active
                       ? 'bg-white/10 text-white ring-2 ring-primary'
                       : 'bg-white/5 text-white/35',

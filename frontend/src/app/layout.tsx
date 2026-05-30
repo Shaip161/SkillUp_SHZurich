@@ -9,12 +9,13 @@ const display = Space_Grotesk({ subsets: ['latin'], variable: '--font-display', 
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' })
 
 export const metadata: Metadata = {
+  applicationName: 'Skill Up',
   title: {
-    default: 'AscendAI — Career Evolution OS',
-    template: '%s · AscendAI',
+    default: 'Skill Up — Career Evolution OS',
+    template: '%s · Skill Up',
   },
   description:
-    'An AI-native operating system for career evolution: match to aspirational roles, then evolve into them through a personalized, adaptive learning journey.',
+    'Skill Up is an AI-native operating system for career evolution: match to aspirational roles, then evolve into them through a personalized, adaptive learning journey.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

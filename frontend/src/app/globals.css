@@ -9,8 +9,8 @@
   --surface-strong: rgba(255, 255, 255, 0.07);
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
-  --primary: #34e0a1;
-  --accent: #38bdf8;
+  --primary: #b20043;
+  --accent: #ff7000;
 }
 
 html {
@@ -31,7 +31,7 @@ body {
 
 @layer base {
   ::selection {
-    background: rgba(52, 224, 161, 0.3);
+    background: rgba(178, 0, 67, 0.35);
     color: #fff;
   }
 
@@ -40,12 +40,14 @@ body {
     width: 10px;
     height: 10px;
   }
+
   ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.18);
     background-clip: padding-box;
@@ -53,20 +55,19 @@ body {
 }
 
 @layer components {
+
   /* Frosted glass surface used across cards/nav */
   .glass {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.06),
-      rgba(255, 255, 255, 0.02)
-    );
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.02));
     border: 1px solid var(--border);
     backdrop-filter: blur(12px);
   }
 
   /* Gradient text for headline accents */
   .text-gradient {
-    background-image: linear-gradient(110deg, #ffffff 10%, #8ff7d3 55%, #7dd3fc 100%);
+    background-image: linear-gradient(110deg, #ffffff 10%, #ffb36d 52%, #ff78a4 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -79,9 +80,10 @@ body {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(60% 50% at 50% -5%, rgba(52, 224, 161, 0.14), transparent 70%),
-      radial-gradient(40% 40% at 90% 10%, rgba(56, 189, 248, 0.1), transparent 70%);
+      radial-gradient(60% 50% at 50% -5%, rgba(178, 0, 67, 0.18), transparent 70%),
+      radial-gradient(40% 40% at 90% 10%, rgba(255, 112, 0, 0.12), transparent 70%);
   }
+
   .ambient-grid {
     position: fixed;
     inset: 0;
@@ -97,18 +99,17 @@ body {
 
 @layer utilities {
   .shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(255, 255, 255, 0.12) 37%,
-      rgba(255, 255, 255, 0.05) 63%
-    );
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0.12) 37%,
+        rgba(255, 255, 255, 0.05) 63%);
     background-size: 400% 100%;
   }
 }
 
 /* Respect user motion preferences globally as a safety net */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

@@ -83,7 +83,7 @@ export function GenerationSequence({
               y1={NODES[a].y}
               x2={NODES[b].x}
               y2={NODES[b].y}
-              stroke="rgba(52,224,161,0.45)"
+              stroke="rgba(255,112,0,0.42)"
               strokeWidth="0.5"
               variants={drawLine}
               initial="hidden"
@@ -97,11 +97,11 @@ export function GenerationSequence({
               cx={n.x}
               cy={n.y}
               r={n.r ?? 3.2}
-              fill={n.core ? '#34e0a1' : '#38bdf8'}
+              fill={n.core ? '#B20043' : '#FF7000'}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: i * 0.14, type: 'spring', stiffness: 260, damping: 18 }}
-              style={{ filter: `drop-shadow(0 0 4px ${n.core ? '#34e0a1' : '#38bdf8'})`, transformOrigin: `${n.x}px ${n.y}px` }}
+              style={{ filter: `drop-shadow(0 0 4px ${n.core ? '#B20043' : '#FF7000'})`, transformOrigin: `${n.x}px ${n.y}px` }}
             />
           ))}
         </svg>

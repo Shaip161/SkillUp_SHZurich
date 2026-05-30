@@ -5,8 +5,8 @@ import type { Config } from 'tailwindcss'
  *
  * Tokens are driven by CSS custom properties declared in globals.css so the
  * same scale powers both System A (matchmaking) and System B (learning).
- * Palette philosophy: deep near-black base, layered surfaces, an emerald
- * "growth" primary + an electric cyan "intelligence" accent. No AI-purple.
+ * Palette philosophy: deep near-black base, layered surfaces, a signature
+ * magenta primary + a vivid orange accent from the Skill Up brand system.
  */
 const config: Config = {
   content: [
@@ -24,25 +24,25 @@ const config: Config = {
           700: '#111a2e',
           600: '#18233b',
         },
-        // Primary "growth" accent (evolved from the original teal)
+        // Primary brand accent (SDG Magenta)
         primary: {
-          DEFAULT: '#34e0a1',
-          50: '#e8fff6',
-          100: '#c4ffe9',
-          200: '#8ff7d3',
-          300: '#55ecbb',
-          400: '#34e0a1',
-          500: '#16c489',
-          600: '#0b9e6e',
-          700: '#0a7a57',
+          DEFAULT: '#b20043',
+          50: '#fff1f7',
+          100: '#ffd7e6',
+          200: '#ffadc9',
+          300: '#ff78a4',
+          400: '#f1427d',
+          500: '#b20043',
+          600: '#930038',
+          700: '#74002d',
         },
-        // Secondary "intelligence" accent (electric cyan)
+        // Secondary brand accent (Orange)
         accent: {
-          DEFAULT: '#38bdf8',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
+          DEFAULT: '#ff7000',
+          300: '#ffa452',
+          400: '#ff8a1f',
+          500: '#ff7000',
+          600: '#db6000',
         },
         // legacy alias kept so any leftover navy-* utility still resolves
         navy: {
@@ -60,15 +60,15 @@ const config: Config = {
         '4xl': '2rem',
       },
       boxShadow: {
-        glow: '0 0 0 1px rgba(52,224,161,0.25), 0 0 32px -4px rgba(52,224,161,0.35)',
-        'glow-accent': '0 0 0 1px rgba(56,189,248,0.25), 0 0 32px -4px rgba(56,189,248,0.35)',
+        glow: '0 0 0 1px rgba(178,0,67,0.28), 0 0 32px -4px rgba(178,0,67,0.38)',
+        'glow-accent': '0 0 0 1px rgba(255,112,0,0.28), 0 0 32px -4px rgba(255,112,0,0.35)',
         elevated: '0 24px 60px -20px rgba(0,0,0,0.65)',
       },
       backgroundImage: {
         'grid-faint':
           'linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px)',
         'radial-fade':
-          'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(52,224,161,0.12), transparent 70%)',
+          'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(178,0,67,0.14), transparent 70%)',
       },
       keyframes: {
         'fade-up': {

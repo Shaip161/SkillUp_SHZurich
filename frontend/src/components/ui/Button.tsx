@@ -11,9 +11,9 @@ const button = cva(
     variants: {
       variant: {
         primary:
-          'bg-primary text-base-950 hover:bg-primary-300 shadow-[0_8px_30px_-8px_rgba(52,224,161,0.5)]',
+          'bg-primary text-white hover:bg-primary-400 shadow-[0_8px_30px_-8px_rgba(178,0,67,0.55)]',
         accent:
-          'bg-accent text-base-950 hover:bg-accent-300 shadow-[0_8px_30px_-8px_rgba(56,189,248,0.5)]',
+          'bg-accent text-base-950 hover:bg-accent-300 shadow-[0_8px_30px_-8px_rgba(255,112,0,0.45)]',
         secondary: 'glass text-white hover:bg-white/[0.09]',
         outline:
           'border border-white/15 text-white hover:border-white/30 hover:bg-white/5',
@@ -31,7 +31,7 @@ const button = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof button> {
+  VariantProps<typeof button> {
   loading?: boolean
 }
 

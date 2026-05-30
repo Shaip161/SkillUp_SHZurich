@@ -24,7 +24,7 @@ export function ProgressRing({
   const v = clamp(value)
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
-  const color = tone === 'primary' ? '#34e0a1' : '#38bdf8'
+  const color = tone === 'primary' ? '#B20043' : '#FF7000'
 
   return (
     <div className={cn('relative inline-flex items-center justify-center', className)} style={{ width: size, height: size }}>
