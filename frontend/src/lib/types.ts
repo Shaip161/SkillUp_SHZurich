@@ -76,6 +76,16 @@ export type MasteryStatus =
   | 'retry_ready'
   | 'completed'
 
+export interface LearningConcept {
+  concept_id: string
+  title: string
+  explanation: string
+  example: string
+  takeaway: string
+  intuition?: string
+  checkpoints?: string[]
+}
+
 export interface StagePayload {
   stage_id: string
   stage_type: StageType
@@ -142,6 +152,8 @@ export interface SubskillProgress {
   progress_percent: number
   retry_count: number
   latest_scores: Partial<Record<'conceptual' | 'practical' | 'final', number>>
+  concept_index?: number
+  explained_concepts?: LearningConcept[]
 }
 
 /** Mock evaluation result returned by /api/learning/stage/submit. */

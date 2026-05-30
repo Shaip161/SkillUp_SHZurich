@@ -8,7 +8,7 @@ import { Reveal, Stagger, StaggerItem } from '@/components/ui/motion'
 import { useSession } from '@/lib/store/session'
 
 const PILLARS = [
-  { icon: Compass, title: 'Match', body: 'See the roles you could grow into — ranked by real compatibility, not keywords.' },
+  { icon: Compass, title: 'Match', body: 'See the roles you could grow into, ranked by real compatibility instead of keywords.' },
   { icon: Network, title: 'Generate', body: 'An AI composes a personalized evolution path from your exact skill gaps.' },
   { icon: Trophy, title: 'Evolve', body: 'Progress through adaptive stages until the future role is genuinely yours.' },
 ]
@@ -40,7 +40,7 @@ export default function LandingPage() {
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/55">
             Not a course catalog. An AI operating system that maps the distance between who you are
-            today and the role you want — then closes it, step by step.
+            today and the role you want, then closes it step by step.
           </p>
 
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">

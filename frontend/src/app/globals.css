@@ -19,7 +19,14 @@ html {
 }
 
 body {
-  background-color: var(--bg);
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(70% 60% at 12% -10%, rgba(39, 55, 101, 0.24), transparent 58%),
+    radial-gradient(52% 46% at 82% 2%, rgba(178, 0, 67, 0.16), transparent 60%),
+    radial-gradient(44% 38% at 50% 100%, rgba(255, 112, 0, 0.1), transparent 70%),
+    linear-gradient(180deg, #04060c 0%, #060a13 34%, #05070d 100%);
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -58,11 +65,15 @@ body {
 
   /* Frosted glass surface used across cards/nav */
   .glass {
-    background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0.06),
-        rgba(255, 255, 255, 0.02));
-    border: 1px solid var(--border);
+    background:
+      linear-gradient(180deg, rgba(20, 24, 39, 0.9), rgba(10, 13, 23, 0.76)),
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.045), transparent 48%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      0 26px 70px -42px rgba(0, 0, 0, 0.82),
+      0 0 0 1px rgba(255, 255, 255, 0.02);
   }
 
   /* Gradient text for headline accents */
@@ -80,8 +91,10 @@ body {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(60% 50% at 50% -5%, rgba(178, 0, 67, 0.18), transparent 70%),
-      radial-gradient(40% 40% at 90% 10%, rgba(255, 112, 0, 0.12), transparent 70%);
+      radial-gradient(72% 58% at 50% -8%, rgba(30, 43, 84, 0.26), transparent 62%),
+      radial-gradient(48% 42% at 88% 10%, rgba(178, 0, 67, 0.16), transparent 68%),
+      radial-gradient(42% 36% at 18% 18%, rgba(255, 112, 0, 0.08), transparent 72%),
+      radial-gradient(38% 34% at 50% 100%, rgba(255, 255, 255, 0.03), transparent 70%);
   }
 
   .ambient-grid {
@@ -90,10 +103,10 @@ body {
     z-index: -1;
     pointer-events: none;
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
     background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 78% 66% at 50% 0%, #000 34%, transparent 82%);
   }
 }
 

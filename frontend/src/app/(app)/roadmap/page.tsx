@@ -8,6 +8,7 @@ import { RoadmapPath } from '@/components/learning/RoadmapPath'
 import { ProgressRing } from '@/components/ui/ProgressRing'
 import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/ui/motion'
+import { polishUiSentence } from '@/lib/utils'
 
 export default function RoadmapPage() {
   const router = useRouter()
@@ -40,19 +41,19 @@ export default function RoadmapPage() {
   return (
     <div className="space-y-12">
       {/* Hero / progression header (Step 8) */}
-      <Reveal className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
+      <Reveal className="relative overflow-hidden rounded-[32px] border border-white/[0.07] bg-[linear-gradient(135deg,rgba(21,25,39,0.94),rgba(10,13,23,0.82))] p-6 shadow-[0_36px_100px_-58px_rgba(0,0,0,0.9)] sm:p-8">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,112,0,0.12),transparent_28%),radial-gradient(circle_at_top_left,rgba(178,0,67,0.18),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_40%)]" />
         <div className="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary/70">
               Your evolution path
             </p>
             <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              {curriculum.target_role.title}
+              {polishUiSentence(curriculum.target_role.title)}
             </h1>
             <p className="mt-2 max-w-md text-sm text-white/55">
               {done
-                ? 'Every skill mastered — you have fully grown into this role.'
+                ? 'Every skill is mastered. You have fully grown into this role.'
                 : `${curriculum.skills.length} skills compose this transformation. ${Math.round(overall * 100)}% complete.`}
             </p>
             {next && (

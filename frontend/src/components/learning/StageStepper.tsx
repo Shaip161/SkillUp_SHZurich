@@ -35,10 +35,10 @@ export function StageStepper({
                 className={cn(
                   'grid h-7 w-7 place-items-center rounded-full text-[11px] font-semibold transition-colors',
                   done
-                    ? 'bg-primary text-white'
+                    ? 'border border-primary/25 bg-[linear-gradient(180deg,rgba(205,28,95,0.95),rgba(178,0,67,0.95))] text-white shadow-[0_10px_24px_-12px_rgba(178,0,67,0.6)]'
                     : active
-                      ? 'bg-white/10 text-white ring-2 ring-primary'
-                      : 'bg-white/5 text-white/35',
+                      ? 'border border-primary/20 bg-[linear-gradient(180deg,rgba(26,32,48,0.94),rgba(12,16,27,0.86))] text-white shadow-[0_0_0_1px_rgba(178,0,67,0.28),0_0_18px_-8px_rgba(178,0,67,0.55)]'
+                      : 'border border-white/[0.05] bg-white/[0.04] text-white/35',
                 )}
               >
                 {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
@@ -53,8 +53,8 @@ export function StageStepper({
               </span>
             </div>
             {i < items.length - 1 && (
-              <div className="mx-1 h-px flex-1 bg-white/10">
-                <div className={cn('h-full', done ? 'bg-primary' : 'bg-transparent')} />
+              <div className="mx-1 h-px flex-1 bg-white/[0.06]">
+                <div className={cn('h-full', done ? 'bg-gradient-to-r from-primary to-accent' : active ? 'bg-white/20' : 'bg-transparent')} />
               </div>
             )}
           </div>

@@ -32,7 +32,7 @@ export default function LoginPage() {
         <div className="text-center">
           <h1 className="font-display text-3xl font-bold tracking-tight">Welcome back</h1>
           <p className="mt-2 text-sm text-white/50">
-            Sign in to continue your evolution. No password — this is a demo.
+            Sign in to continue your evolution. No password is needed for this demo.
           </p>
         </div>
 

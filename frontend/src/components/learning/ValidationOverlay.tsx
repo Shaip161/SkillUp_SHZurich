@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check, Loader2 } from 'lucide-react'
 
-const CHECKS = ['Parsing your submission', 'Validating correctness', 'Assessing implementation quality']
+const CHECKS = ['Reviewing your explanation', 'Looking for clear reasoning', 'Checking how you would apply it']
 
 /**
  * Step 7.4 — "Agent Validation". A short sequence where AI agents appear to
@@ -34,7 +34,7 @@ export function ValidationOverlay({ onDone }: { onDone: () => void }) {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/60" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
         </span>
-        Agents validating your work
+        Reviewing your response
       </p>
       <ul className="space-y-2.5">
         {CHECKS.map((label, i) => {

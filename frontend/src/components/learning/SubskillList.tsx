@@ -7,7 +7,7 @@ import type { CurriculumSkill, SubskillProgress } from '@/lib/types'
 import { ProgressRing } from '@/components/ui/ProgressRing'
 import { staggerContainer, fadeUp } from '@/lib/motion'
 import { isSubskillUnlocked } from '@/lib/store/journey'
-import { cn } from '@/lib/utils'
+import { cn, polishGeneratedLabel } from '@/lib/utils'
 
 const STATUS_LABEL: Record<string, string> = {
   not_started: 'Locked',
@@ -47,12 +47,12 @@ export function SubskillList({
               disabled={!unlocked}
               onClick={() => router.push(`/roadmap/${skill.skill_id}/${sub.subskill_id}`)}
               className={cn(
-                'group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all',
+                'group flex w-full items-center gap-4 rounded-[24px] border p-4 text-left transition-all duration-300',
                 complete
-                  ? 'border-primary/30 bg-primary/[0.05]'
+                  ? 'border-primary/20 bg-[linear-gradient(180deg,rgba(178,0,67,0.12),rgba(14,18,30,0.88))] shadow-[0_24px_60px_-42px_rgba(178,0,67,0.42)]'
                   : unlocked
-                    ? 'border-white/12 bg-white/[0.04] hover:border-primary/40 hover:bg-white/[0.07]'
-                    : 'cursor-not-allowed border-white/8 bg-white/[0.02] opacity-60',
+                    ? 'border-white/[0.08] bg-[linear-gradient(180deg,rgba(18,22,35,0.94),rgba(10,13,22,0.82))] shadow-[0_22px_50px_-40px_rgba(0,0,0,0.8)] hover:-translate-y-0.5 hover:border-primary/26 hover:shadow-[0_28px_66px_-42px_rgba(178,0,67,0.34)]'
+                    : 'cursor-not-allowed border-white/[0.06] bg-[linear-gradient(180deg,rgba(13,16,27,0.9),rgba(9,12,20,0.78))] opacity-60',
               )}
             >
               {/* status medallion */}
@@ -75,18 +75,18 @@ export function SubskillList({
                   </span>
                   <span
                     className={cn(
-                      'rounded-full px-1.5 py-0.5 text-[10px]',
+                      'rounded-full border px-1.5 py-0.5 text-[10px]',
                       complete
-                        ? 'bg-primary/15 text-primary-200'
+                        ? 'border-primary/20 bg-primary/14 text-primary-200'
                         : status === 'needs_remediation'
-                          ? 'bg-amber-400/15 text-amber-200'
-                          : 'bg-white/5 text-white/45',
+                          ? 'border-amber-400/18 bg-amber-400/15 text-amber-200'
+                          : 'border-white/8 bg-white/[0.04] text-white/48',
                     )}
                   >
                     {STATUS_LABEL[status]}
                   </span>
                 </div>
-                <h3 className="mt-0.5 truncate font-medium text-white">{sub.subskill_name}</h3>
+                <h3 className="mt-0.5 truncate font-medium text-white">{polishGeneratedLabel(sub.subskill_name)}</h3>
                 <p className="mt-0.5 line-clamp-1 text-xs text-white/45">{sub.objective}</p>
               </div>
             </button>

@@ -7,6 +7,7 @@ import { SubskillList } from '@/components/learning/SubskillList'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Reveal } from '@/components/ui/motion'
+import { polishGeneratedLabel, polishUiSentence } from '@/lib/utils'
 
 export default function SkillPage() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export default function SkillPage() {
       <Breadcrumb
         items={[
           { label: 'Roadmap', href: '/roadmap' },
-          { label: skill.skill_name },
+          { label: polishGeneratedLabel(skill.skill_name) },
         ]}
       />
 
@@ -39,8 +40,8 @@ export default function SkillPage() {
         <span className="inline-block rounded-full bg-white/5 px-2 py-0.5 text-[11px] capitalize text-white/45">
           {skill.difficulty_level}
         </span>
-        <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">{skill.skill_name}</h1>
-        <p className="mt-2 text-white/55">{skill.description}</p>
+        <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">{polishGeneratedLabel(skill.skill_name)}</h1>
+        <p className="mt-2 text-white/55">{polishUiSentence(skill.description)}</p>
         <div className="mt-5 flex items-center gap-3">
           <ProgressBar value={ratio} className="max-w-xs" showLabel />
           <span className="text-xs text-white/40">

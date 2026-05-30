@@ -10,6 +10,7 @@ import { StageFlow } from '@/components/learning/StageFlow'
 import { StageStepper } from '@/components/learning/StageStepper'
 import { Breadcrumb } from '@/components/ui/Breadcrumb'
 import { Button } from '@/components/ui/Button'
+import { polishGeneratedLabel } from '@/lib/utils'
 
 export default function SubskillPage() {
   const router = useRouter()
@@ -40,19 +41,21 @@ export default function SubskillPage() {
     p.mastery_status === 'needs_remediation' ||
     p.mastery_status === 'retry_ready' ||
     p.current_stage === 'reflection'
+  const displaySkillName = polishGeneratedLabel(skill.skill_name)
+  const displaySubskillName = polishGeneratedLabel(subskill.subskill_name)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-7">
+    <div className="mx-auto max-w-5xl space-y-8">
       <Breadcrumb
         items={[
           { label: 'Roadmap', href: '/roadmap' },
-          { label: skill.skill_name, href: `/roadmap/${skillId}` },
-          { label: subskill.subskill_name },
+          { label: displaySkillName, href: `/roadmap/${skillId}` },
+          { label: displaySubskillName },
         ]}
       />
 
-      <div>
-        <h1 className="font-display text-2xl font-bold tracking-tight">{subskill.subskill_name}</h1>
+      <div className="max-w-3xl">
+        <h1 className="font-display text-2xl font-bold tracking-tight">{displaySubskillName}</h1>
         <p className="mt-1 text-sm text-white/50">{subskill.objective}</p>
       </div>
 
@@ -73,11 +76,10 @@ export default function SubskillPage() {
                 aria-selected={selected}
                 aria-controls={`subskill-panel-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
-                className={`rounded-[20px] border px-4 py-3 text-left transition ${
-                  selected
+                className={`rounded-[20px] border px-4 py-3 text-left transition ${selected
                     ? 'border-primary/30 bg-gradient-to-r from-primary/18 via-primary/10 to-accent/12 text-white shadow-[0_12px_40px_-24px_rgba(178,0,67,0.75)]'
                     : 'border-transparent text-white/58 hover:border-white/10 hover:bg-white/[0.03] hover:text-white/80'
-                }`}
+                  }`}
               >
                 <span className="block text-sm font-semibold tracking-tight">{tab.label}</span>
                 <span className={`mt-1 block text-xs ${selected ? 'text-white/68' : 'text-white/42'}`}>
@@ -96,7 +98,7 @@ export default function SubskillPage() {
         hidden={activeTab !== 'course'}
         className="space-y-6"
       >
-        <div className="rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+        <div className="rounded-3xl border border-white/8 bg-white/[0.02] p-4 lg:p-5">
           <StageStepper completed={p.completed_steps} current={p.current_stage} inRemediation={inRemediation} />
         </div>
 
@@ -113,7 +115,7 @@ export default function SubskillPage() {
             </span>
             <h2 className="mt-4 font-display text-2xl font-bold">Milestone mastered</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-white/55">
-              You&apos;ve demonstrated real capability in {subskill.subskill_name.toLowerCase()}.
+              You&apos;ve demonstrated real capability in {displaySubskillName.toLowerCase()}.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               {nextSub ? (
@@ -143,7 +145,7 @@ export default function SubskillPage() {
         aria-labelledby="subskill-tab-community"
         hidden={activeTab !== 'community'}
       >
-        <CommunityFeed skillName={skill.skill_name} subskillName={subskill.subskill_name} />
+        <CommunityFeed skillName={displaySkillName} subskillName={displaySubskillName} />
       </section>
     </div>
   )

@@ -21,7 +21,7 @@ export function SkillGapViz({ gap }: { gap: GapResponse }) {
           <p className="mt-0.5 text-sm text-white/45">
             {gap.missing_skills.length === 0
               ? 'You already hold every required skill.'
-              : `${gap.matched_skills.length} of ${total} skills in place — ${gap.missing_skills.length} to evolve.`}
+              : `${gap.matched_skills.length} of ${total} skills are already in place, with ${gap.missing_skills.length} left to evolve.`}
           </p>
         </div>
         <span className="font-display text-2xl font-bold text-primary tabular-nums">
@@ -38,7 +38,7 @@ export function SkillGapViz({ gap }: { gap: GapResponse }) {
           </p>
           <div className="space-y-1.5">
             {gap.matched_skills.length === 0 && (
-              <p className="text-sm text-white/40">No direct matches yet — that's where we begin.</p>
+              <p className="text-sm text-white/40">No direct matches yet. That&apos;s where we begin.</p>
             )}
             {gap.matched_skills.map((s, i) => (
               <motion.div
@@ -60,7 +60,7 @@ export function SkillGapViz({ gap }: { gap: GapResponse }) {
           </p>
           <div className="space-y-1.5">
             {gap.missing_skills.length === 0 && (
-              <p className="text-sm text-white/40">Nothing missing — you're ready.</p>
+              <p className="text-sm text-white/40">Nothing is missing. You&apos;re ready.</p>
             )}
             {gap.missing_skills.map((s, i) => (
               <motion.div

@@ -32,3 +32,22 @@ export function initials(value: string): string {
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
 }
+
+/** Light cleanup for generated UI labels so they read more like product copy. */
+export function polishGeneratedLabel(value: string): string {
+  return value
+    .replace(/\s+—\s+/g, ', ')
+    .replace(/\s*&\s*/g, ' and ')
+    .replace(/,\s*Foundations$/i, ' Fundamentals')
+    .replace(/,\s*Core Techniques$/i, ', Core Practice')
+    .replace(/,\s*Applied Practice$/i, ', Applied Scenarios')
+    .replace(/,\s*Integration$/i, ', Workflow Integration')
+    .replace(/,\s*Mastery and Judgment$/i, ', Strategic Judgment')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
+/** Small cleanup for sentence-style copy that uses dash separators too heavily. */
+export function polishUiSentence(value: string): string {
+  return value.replace(/\s+—\s+/g, ', ').replace(/\s{2,}/g, ' ').trim()
+}

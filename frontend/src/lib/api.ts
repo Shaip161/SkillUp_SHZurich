@@ -3,6 +3,7 @@ import type {
   GapResponse,
   JobDetail,
   JobListItem,
+  LearningConcept,
   MatchResponse,
   StageEvaluation,
   StageType,
@@ -86,6 +87,11 @@ export function submitStage(input: {
   stage: StageType
   submission: string
   attempt?: number
+  context?: {
+    explainedConcepts?: LearningConcept[]
+    prompt?: string
+    subskillName?: string
+  }
 }): Promise<StageEvaluation> {
   return request<StageEvaluation>('/api/learning/stage/submit', {
     method: 'POST',

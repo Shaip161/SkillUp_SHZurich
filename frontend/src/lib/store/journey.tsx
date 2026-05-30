@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useReducer, useState } f
 import type {
   Curriculum,
   CurriculumSkill,
+  LearningConcept,
   MasteryStatus,
   StageEvaluation,
   StageType,
@@ -54,7 +55,30 @@ function freshProgress(skillId: string, subskillId: string): SubskillProgress {
     progress_percent: 0,
     retry_count: 0,
     latest_scores: {},
+    concept_index: 0,
+    explained_concepts: [],
   }
+}
+
+function introductionConcepts(
+  curriculum: Curriculum | null,
+  skillId: string,
+  subskillId: string,
+): LearningConcept[] {
+  const skill = curriculum?.skills.find((item) => item.skill_id === skillId)
+  const subskill = skill?.subskills.find((item) => item.subskill_id === subskillId)
+  const introduction = subskill?.stages.find((stage) => stage.stage_type === 'introduction')
+  const sequence = introduction?.context.concept_sequence
+  return Array.isArray(sequence) ? (sequence as LearningConcept[]) : []
+}
+
+function rememberConcept(
+  explained: LearningConcept[] | undefined,
+  concept: LearningConcept | undefined,
+): LearningConcept[] {
+  const existing = explained ?? []
+  if (!concept || existing.some((item) => item.concept_id === concept.concept_id)) return existing
+  return [...existing, concept]
 }
 
 function percent(completed: StageType[], mastery: MasteryStatus): number {
@@ -94,9 +118,45 @@ function reducer(state: JourneyState, action: Action): JourneyState {
       let next: StageType | null = p.current_stage
       let mastery: MasteryStatus = p.mastery_status
       if (action.from === 'introduction') {
+        const conceptIndex = p.concept_index ?? 0
+        const concepts = introductionConcepts(state.curriculum, action.skillId, action.subskillId)
+        const explained = rememberConcept(p.explained_concepts, concepts[conceptIndex])
+
+        if (concepts.length > 0 && conceptIndex < concepts.length - 1) {
+          return {
+            ...state,
+            progress: {
+              ...state.progress,
+              [action.subskillId]: {
+                ...p,
+                concept_index: conceptIndex + 1,
+                explained_concepts: explained,
+                current_stage: 'introduction',
+                mastery_status: 'in_progress',
+                progress_percent: percent(completed, 'in_progress'),
+              },
+            },
+          }
+        }
+
         completed = Array.from(new Set<StageType>([...completed, 'introduction']))
         next = 'conceptual'
         mastery = 'in_progress'
+        return {
+          ...state,
+          progress: {
+            ...state.progress,
+            [action.subskillId]: {
+              ...p,
+              completed_steps: completed,
+              current_stage: next,
+              mastery_status: mastery,
+              progress_percent: percent(completed, mastery),
+              concept_index: conceptIndex,
+              explained_concepts: explained,
+            },
+          },
+        }
       } else if (action.from === 'reflection') {
         next = 'evaluation'
         mastery = 'retry_ready'
