@@ -10,6 +10,7 @@ from typing import Any, Callable
 from .state import (
     RunState,
     WorkflowMessage,
+    _json_safe,
     append_error,
     build_state_summary,
     diff_state_snapshots,
@@ -20,6 +21,10 @@ from .state import (
 )
 
 NodeHandler = Callable[[RunState, "WorkflowServices"], "NodeResult"]
+
+
+def _serialize_node_io(payload: dict[str, Any]) -> dict[str, Any]:
+    return _json_safe(payload)
 
 
 @dataclass
@@ -150,6 +155,24 @@ class WorkflowRunner:
                     },
                     level="standard",
                 )
+                runtime.logger.record(
+                    "workflow.node.input",
+                    {
+                        "workflow": self.name,
+                        "node": node.name,
+                        "transition": transitions + 1,
+                        "input": _serialize_node_io(
+                            {
+                                "objective": state.objective,
+                                "shared": before_snapshot["shared"],
+                                "outputs": before_snapshot["outputs"],
+                                "metadata": dict(state.metadata),
+                                "messages": [message.to_dict() for message in state.messages],
+                            }
+                        ),
+                    },
+                    level="debug",
+                )
 
             try:
                 result = node.handler(state, runtime)
@@ -183,6 +206,27 @@ class WorkflowRunner:
                 set_output(state, key, value)
             for message in result.emitted_messages:
                 publish_message(state, message)
+
+            if runtime.logger is not None:
+                runtime.logger.record(
+                    "workflow.node.output",
+                    {
+                        "workflow": self.name,
+                        "node": node.name,
+                        "transition": transitions + 1,
+                        "output": _serialize_node_io(
+                            {
+                                "updates": result.updates,
+                                "outputs": result.outputs,
+                                "emitted_messages": [message.to_dict() for message in result.emitted_messages],
+                                "next_node": result.next_node or node.default_next,
+                                "stop": result.stop,
+                                "status": result.status or ("completed" if result.stop else "success"),
+                            }
+                        ),
+                    },
+                    level="debug",
+                )
 
             if runtime.logger is not None:
                 after_snapshot = snapshot_state(state)

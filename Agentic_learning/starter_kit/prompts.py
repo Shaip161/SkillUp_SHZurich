@@ -1,18 +1,13 @@
-"""Prompt templates and builders for reusable agent workflows."""
+"""Minimal prompt template helpers for backend learning workflows."""
 
 from __future__ import annotations
 
-from functools import lru_cache
 import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .state import RunState, StepRecord
-from .tools import ToolRegistry
-
-DEFAULT_PROMPT_TEMPLATE_DIR = Path(__file__).with_name("prompt_templates")
 _SECTION_HEADER_PATTERN = re.compile(r"^([A-Z0-9_ ]+):\s*$")
 _PLACEHOLDER_PATTERN = re.compile(r"{{\s*([A-Z0-9_]+)\s*}}")
 
@@ -21,24 +16,6 @@ def _stringify(value: Any) -> str:
     if isinstance(value, str):
         return value.strip()
     return json.dumps(value, indent=2, ensure_ascii=True)
-
-
-def _format_history(history: list[StepRecord], limit: int = 4) -> str:
-    if not history:
-        return "NONE"
-    lines: list[str] = []
-    for entry in history[-limit:]:
-        lines.append(
-            " | ".join(
-                [
-                    f"step={entry.step_id}",
-                    f"action={entry.action or 'n/a'}",
-                    f"status={entry.status}",
-                    f"observation={json.dumps(entry.observation, ensure_ascii=True)}",
-                ]
-            )
-        )
-    return "\n".join(lines)
 
 
 def _parse_template_sections(text: str) -> dict[str, str]:
@@ -141,122 +118,3 @@ class PromptTemplate:
                 continue
             lines.append(f"{title}:\n{content}")
         return "\n\n".join(lines).strip()
-
-
-class PromptCatalog:
-    def __init__(self, templates: list[PromptTemplate] | None = None) -> None:
-        self._templates: dict[str, PromptTemplate] = {}
-        for template in templates or []:
-            self.register(template)
-
-    def register(self, template: PromptTemplate) -> None:
-        self._templates[template.name] = template
-
-    def get(self, name: str) -> PromptTemplate:
-        return self._templates[name]
-
-    def names(self) -> list[str]:
-        return sorted(self._templates.keys())
-
-    def load_file(
-        self,
-        file_path: str | Path,
-        *,
-        name: str | None = None,
-    ) -> PromptTemplate:
-        template = PromptTemplate.from_file(file_path, name=name)
-        self.register(template)
-        return template
-
-    def load_directory(
-        self,
-        directory: str | Path | None = None,
-        *,
-        pattern: str = "*.txt",
-    ) -> "PromptCatalog":
-        template_dir = Path(directory) if directory is not None else DEFAULT_PROMPT_TEMPLATE_DIR
-        if not template_dir.is_dir():
-            return self
-        for path in sorted(template_dir.glob(pattern)):
-            self.load_file(path)
-        return self
-
-    @classmethod
-    def load_builtin(cls) -> "PromptCatalog":
-        return cls().load_directory()
-
-
-@dataclass
-class PromptBuilder:
-    """Small explicit builder that assembles prompt context around a template."""
-
-    template: PromptTemplate
-    history_limit: int = 4
-    base_sections: dict[str, Any] = field(default_factory=dict)
-
-    def build_sections(
-        self,
-        state: RunState,
-        tool_registry: ToolRegistry,
-        *,
-        extra_sections: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
-        sections: dict[str, Any] = {
-            "OBJECTIVE": state.objective,
-            "STEP": f"{state.current_step + 1}/{state.max_steps}",
-            "STATUS": state.status,
-            "AVAILABLE_TOOLS": tool_registry.render_for_prompt(),
-            "SHARED_STATE": state.shared,
-            "RECENT_HISTORY": _format_history(state.history, limit=self.history_limit),
-        }
-        sections.update(dict(self.base_sections))
-        if extra_sections:
-            sections.update(dict(extra_sections))
-        return sections
-
-    def build(
-        self,
-        state: RunState,
-        tool_registry: ToolRegistry,
-        *,
-        extra_sections: dict[str, Any] | None = None,
-    ) -> str:
-        return self.template.render(
-            self.build_sections(
-                state,
-                tool_registry,
-                extra_sections=extra_sections,
-            )
-        )
-
-
-def load_prompt_template(
-    file_path: str | Path,
-    *,
-    name: str | None = None,
-) -> PromptTemplate:
-    return PromptTemplate.from_file(file_path, name=name)
-
-
-@lru_cache(maxsize=1)
-def get_default_prompt_template() -> PromptTemplate:
-    return load_prompt_template(DEFAULT_PROMPT_TEMPLATE_DIR / "default_agent.txt", name="default_agent")
-
-
-def build_agent_prompt(
-    state: RunState,
-    tool_registry: ToolRegistry,
-    *,
-    template: PromptTemplate | None = None,
-    extra_sections: dict[str, Any] | None = None,
-    history_limit: int = 4,
-) -> str:
-    builder = PromptBuilder(
-        template=template or get_default_prompt_template(),
-        history_limit=history_limit,
-    )
-    return builder.build(
-        state,
-        tool_registry,
-        extra_sections=extra_sections,
-    )
