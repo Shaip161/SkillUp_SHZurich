@@ -2,3 +2,34 @@ __pycache__/
 .pytest_cache/
 *.pyc
 Agentic_learning_git_backup/
+
+# Environment
+.env
+*.env.local
+
+# Next.js
+.next/
+out/
+frontend/next-env.d.ts
+frontend/tsconfig.tsbuildinfo
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Alembic
+backend/migrations/versions/*.pyc
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+CLAUDE_CODE_BRIEF.md
+CLAUDE.md
