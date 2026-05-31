@@ -126,6 +126,28 @@ function JobDetailContent() {
         </div>
       </div>
 
+      {/* Description */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-white/40">About the role</h2>
+        <p className="whitespace-pre-line text-sm leading-relaxed text-white/60">{job.description}</p>
+      </section>
+
+      {/* Required skills */}
+      {job.required_skills.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-white/40">
+            What the role asks for
+          </h2>
+          <div className="flex flex-wrap gap-1.5">
+            {job.required_skills.map((s) => (
+              <Badge key={s} variant={getVariant(s, gap)}>
+                {s}
+              </Badge>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Trajectory / gap */}
       {gap && (
         <section className="glass rounded-3xl p-6">
@@ -151,28 +173,6 @@ function JobDetailContent() {
           </Button>
         </div>
       </div>
-
-      {/* Required skills */}
-      {job.required_skills.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-white/40">
-            What the role asks for
-          </h2>
-          <div className="flex flex-wrap gap-1.5">
-            {job.required_skills.map((s) => (
-              <Badge key={s} variant={getVariant(s, gap)}>
-                {s}
-              </Badge>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Description */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-white/40">About the role</h2>
-        <p className="whitespace-pre-line text-sm leading-relaxed text-white/60">{job.description}</p>
-      </section>
 
       <a
         href={job.redirect_url}

@@ -6,13 +6,11 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { FileText, Loader2, ScanLine, UploadCloud } from 'lucide-react'
 import { uploadCV } from '@/lib/api'
-import { useSession } from '@/lib/store/session'
 import { Reveal } from '@/components/ui/motion'
 import { cn } from '@/lib/utils'
 
 export default function UploadPage() {
   const router = useRouter()
-  const { session, setUserId } = useSession()
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -39,9 +37,8 @@ export default function UploadPage() {
     setLoading(true)
     setError(null)
     try {
-      const result = await uploadCV(file, session?.userId ?? undefined)
+      const result = await uploadCV(file)
       sessionStorage.setItem('matchResponse', JSON.stringify(result))
-      setUserId(result.user_id)
       router.push('/matches')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
@@ -54,10 +51,10 @@ export default function UploadPage() {
       <Reveal className="text-center">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary/70">Step 1 · Analysis</p>
         <h1 className="mt-3 font-display text-4xl font-bold tracking-tight">
-          {session ? `Let's read your story, ${session.name.split(' ')[0]}` : 'Upload your CV'}
+          Upload your CV
         </h1>
         <p className="mx-auto mt-3 max-w-md text-white/55">
-          Drop your CV and the engine extracts your real skills, transferable strengths, and the roles
+          Drop your CV and the engine extracts your skills, transferable strengths, and the roles
           within reach.
         </p>
       </Reveal>

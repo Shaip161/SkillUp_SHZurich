@@ -19,7 +19,6 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { PageTransition, Reveal, Stagger, StaggerItem } from '@/components/ui/motion'
-import { useSession } from '@/lib/store/session'
 
 interface LandingItem {
   icon: LucideIcon
@@ -34,7 +33,6 @@ interface JourneyMode {
   details: string[]
   buttonLabel: string
   variant: 'primary' | 'accent' | 'secondary' | 'outline' | 'ghost'
-  action: 'start' | 'login'
 }
 
 const HERO_HIGHLIGHTS = ['AI skill analysis', 'Matched roles', 'Personalized roadmap']
@@ -104,18 +102,8 @@ const JOURNEY_MODES: JourneyMode[] = [
     title: 'Start with your CV',
     body: 'Upload your CV to get an AI skill analysis, role matches, and the missing skills behind each opportunity.',
     details: ['Works with the current upload flow', 'Takes PDF or DOCX files', 'Leads directly into matches and gap analysis'],
-    buttonLabel: 'Start my free skill analysis',
+    buttonLabel: 'Begin your evolution',
     variant: 'accent',
-    action: 'start',
-  },
-  {
-    eyebrow: 'Come back anytime',
-    title: 'Pick up where you left off',
-    body: 'Sign in to revisit your matches, return to your roadmap, and keep building toward the role you want.',
-    details: ['Keeps the current sign-in flow', 'Built for repeat visits', 'Returns you to the existing app experience'],
-    buttonLabel: 'Login and continue',
-    variant: 'secondary',
-    action: 'login',
   },
 ]
 
@@ -329,10 +317,8 @@ function SectionVideoAccent() {
 
 export default function LandingPage() {
   const router = useRouter()
-  const { session } = useSession()
-  const start = () => router.push(session ? '/upload' : '/login')
+  const start = () => router.push('/upload')
 
-  const routeToLogin = () => router.push('/login')
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -344,12 +330,7 @@ export default function LandingPage() {
 
         <div className="relative z-10 mx-auto flex min-h-[72svh] w-full max-w-6xl flex-col justify-center px-4 pb-12 pt-20 text-center sm:min-h-[calc(100vh-8rem)] sm:px-6 sm:pb-16 sm:pt-24 lg:pb-20">
           <Reveal className="mx-auto max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-black/25 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/78 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5 text-primary-300" />
-              AI-powered skill analysis and career matching
-            </div>
-
-            <h1 className="mx-auto mt-6 max-w-4xl font-display text-5xl font-bold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-[5rem]">
+            <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-[5rem]">
               See what&apos;s next
               <br />
               <span className="text-gradient">for your career.</span>
@@ -362,11 +343,8 @@ export default function LandingPage() {
 
             <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
               <Button size="lg" onClick={start} className="group sm:min-w-[250px]">
-                Start my free skill analysis
+                Begin your evolution
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-              <Button size="lg" variant="secondary" onClick={() => scrollToSection('trajectory')}>
-                See how it works
               </Button>
             </div>
 
@@ -463,7 +441,7 @@ export default function LandingPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">Navigation intact</p>
                 <h3 className="mt-3 font-display text-xl font-semibold text-white">The current app flow stays exactly where it is</h3>
                 <p className="mt-2 text-sm leading-6 text-white/55">
-                  Calls to action still lead into the existing sign-in, upload, matches, and roadmap routes.
+                  Calls to action lead directly into upload, matches, and roadmap routes.
                 </p>
               </StaggerItem>
             </div>
@@ -495,7 +473,7 @@ export default function LandingPage() {
         </Stagger>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-2">
+      <section className="mx-auto grid max-w-2xl gap-6">
         {JOURNEY_MODES.map((mode) => (
           <Reveal key={mode.title} className="glass rounded-[1.85rem] p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/45">{mode.eyebrow}</p>
@@ -515,7 +493,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant={mode.variant}
-                onClick={mode.action === 'start' ? start : routeToLogin}
+                onClick={start}
                 className="group w-full justify-center sm:w-auto"
               >
                 {mode.buttonLabel}
@@ -526,29 +504,6 @@ export default function LandingPage() {
         ))}
       </section>
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-[linear-gradient(180deg,rgba(178,0,67,0.12),rgba(9,12,21,0.92))] px-6 py-12 text-center shadow-elevated sm:px-10 sm:py-16">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,112,0,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(178,0,67,0.2),transparent_30%)]" />
-        <Reveal className="relative z-10 mx-auto max-w-3xl">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-white/10 bg-white/[0.06]">
-            <Award className="h-6 w-6 text-accent" />
-          </div>
-          <h2 className="mt-6 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-            Ready to see what your CV can unlock?
-          </h2>
-          <p className="mt-5 text-base leading-8 text-white/65">
-            Start with a free skill analysis, review your matches, and build a roadmap around the role you want.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" variant="accent" onClick={start} className="group min-w-[220px]">
-              Start my free skill analysis
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="ghost" onClick={() => scrollToSection('trajectory')}>
-              See how it works
-            </Button>
-          </div>
-        </Reveal>
-      </section>
     </PageTransition>
   )
 }

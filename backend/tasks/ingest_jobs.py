@@ -120,7 +120,7 @@ async def _ingest_category(session: AsyncSession, category: str) -> int:
                 description=cleaned_desc,
                 company=(raw.get("company") or {}).get("display_name"),
                 location=(raw.get("location") or {}).get("display_name"),
-                category=(raw.get("category") or {}).get("label"),
+                category=CATEGORY_LABELS.get(category),
                 seniority=seniority,
                 required_skills=required,
                 nice_to_have=skills.get("nice_to_have", []),

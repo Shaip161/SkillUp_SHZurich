@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.job import Job
 from app.models.user import UserProfile
+from app.rate_limit import limiter
 from app.services.matcher import compute_gap
 
 router = APIRouter()
@@ -27,7 +28,9 @@ class GapResponse(BaseModel):
 
 
 @router.post("/gap/{job_id}", response_model=GapResponse)
+@limiter.limit("30/hour")
 async def get_skill_gap(
+    request: Request,
     job_id: str,
     body: GapRequest,
     db: AsyncSession = Depends(get_db),

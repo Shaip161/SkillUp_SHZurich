@@ -22,7 +22,7 @@ export function Logo({ href = '/', className }: { href?: string; className?: str
           Skill <span className="text-accent">Up</span>
         </span>
         <span className="text-[9px] uppercase tracking-[0.18em] text-white/35">
-          Career Evolution OS
+          Career Evolution.
         </span>
       </span>
     </Link>

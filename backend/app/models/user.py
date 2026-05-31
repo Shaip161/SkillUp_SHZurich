@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 from sqlalchemy import ARRAY, TIMESTAMP, Column, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
@@ -32,7 +32,7 @@ class UserProfile(Base):
 
 
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class UserRead(BaseModel):

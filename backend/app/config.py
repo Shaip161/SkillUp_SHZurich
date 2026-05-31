@@ -14,5 +14,13 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000"
     max_jobs_per_category: int = 10
 
+    @property
+    def allowed_cors_origins(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.cors_origins.split(",")
+            if origin.strip() and origin.strip() != "*"
+        ]
+
 
 settings = Settings()
