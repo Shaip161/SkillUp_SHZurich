@@ -165,7 +165,7 @@ function LoopingVideoLayer({
     if (firstVideo) {
       firstVideo.src = sources[safeIndex]
       firstVideo.load()
-      void firstVideo.play().catch(() => {})
+      void firstVideo.play().catch(() => { })
     }
 
     if (secondVideo) {
@@ -188,7 +188,7 @@ function LoopingVideoLayer({
 
       nextVideo.src = sources[nextIndex]
       nextVideo.load()
-      void nextVideo.play().catch(() => {})
+      void nextVideo.play().catch(() => { })
 
       transitionTimeout = window.setTimeout(() => {
         setActivePlayer(nextPlayer)
