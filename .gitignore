@@ -44,7 +44,6 @@ Agentic_learning_git_backup/
 *.local
 .dockerignore
 frontend/Dockerfile
-
 Agentic_learning/.env
 Agentic_learning/.env.*
 !Agentic_learning/.env.example

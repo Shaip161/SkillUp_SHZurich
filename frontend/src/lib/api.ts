@@ -1,8 +1,13 @@
 import type {
+  Curriculum,
   GapResponse,
   JobDetail,
   JobListItem,
+  LearningConcept,
   MatchResponse,
+  StageEvaluation,
+  StageType,
+  TargetRole,
   User,
   UserProfile,
 } from './types'
@@ -59,4 +64,38 @@ export function getSkillGap(jobId: string, userId: string): Promise<GapResponse>
 
 export function getUserProfile(userId: string): Promise<UserProfile> {
   return request<UserProfile>(`${BASE}/users/${userId}/profile`)
+}
+
+// ───────────── System B — learning (Next.js route handlers / mock backend) ─────────────
+// These hit same-origin /api/learning/* so they work without the Python service.
+// Replace the route handlers' internals with the real System B API to go live.
+
+export function generateCurriculum(input: {
+  targetRole: TargetRole
+  missingSkills: string[]
+  userProfile?: Record<string, unknown>
+  curriculumId?: string
+}): Promise<Curriculum> {
+  return request<Curriculum>('/api/learning/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+}
+
+export function submitStage(input: {
+  stage: StageType
+  submission: string
+  attempt?: number
+  context?: {
+    explainedConcepts?: LearningConcept[]
+    prompt?: string
+    subskillName?: string
+  }
+}): Promise<StageEvaluation> {
+  return request<StageEvaluation>('/api/learning/stage/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
 }

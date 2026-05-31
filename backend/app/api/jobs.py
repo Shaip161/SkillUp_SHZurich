@@ -1,18 +1,21 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import func
 
 from app.database import get_db
 from app.models.job import Job, JobListItem, JobRead
+from app.rate_limit import limiter
 
 router = APIRouter()
 
 
 @router.get("/jobs", response_model=list[JobListItem])
+@limiter.limit("60/hour")
 async def list_jobs(
+    request: Request,
     category: str | None = Query(None),
     seniority: str | None = Query(None),
     limit: int = Query(20, ge=1, le=100),

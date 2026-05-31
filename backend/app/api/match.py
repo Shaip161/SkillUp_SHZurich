@@ -1,7 +1,7 @@
 import uuid as _uuid
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,12 +9,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.models.job import JobListItem
 from app.models.user import User, UserProfile
+from app.rate_limit import limiter
 from app.services.cv_parser import parse_cv
 from app.services.embedder import build_cv_embedding_input, embed_text
 from app.services.matcher import compute_gap, search_jobs
 from app.services.skill_extractor import extract_skills
 
 router = APIRouter()
+
+MAX_CV_UPLOAD_BYTES = 10 * 1024 * 1024
+ALLOWED_CV_EXTENSIONS = {".pdf", ".docx"}
+ALLOWED_CV_CONTENT_TYPES = {
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
 
 
 class JobMatchResult(BaseModel):
@@ -29,14 +37,43 @@ class MatchResponse(BaseModel):
     matches: list[JobMatchResult]
 
 
+def _validate_cv_upload(cv: UploadFile) -> None:
+    filename = cv.filename or ""
+    ext = "." + filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if ext not in ALLOWED_CV_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid CV file type. Upload a PDF or DOCX file.",
+        )
+    if cv.content_type and cv.content_type not in ALLOWED_CV_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid CV content type. Upload a PDF or DOCX file.",
+        )
+
+
+async def _read_limited_upload(cv: UploadFile) -> bytes:
+    data = await cv.read(MAX_CV_UPLOAD_BYTES + 1)
+    if len(data) > MAX_CV_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail="CV file is too large. Maximum size is 10MB.",
+        )
+    return data
+
+
 @router.post("/match", response_model=MatchResponse)
+@limiter.limit("10/hour")
 async def match_cv(
+    request: Request,
     cv: UploadFile = File(...),
     user_id: str | None = Form(None),
     db: AsyncSession = Depends(get_db),
 ) -> MatchResponse:
+    _validate_cv_upload(cv)
+
     # --- Parse ---
-    data = await cv.read()
+    data = await _read_limited_upload(cv)
     try:
         cv_text = parse_cv(data, cv.filename or "upload.pdf")
     except ValueError as exc:

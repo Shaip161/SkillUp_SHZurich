@@ -1,0 +1,8 @@
+{
+  "job_id": "aaaaaaaa-0000-0000-0000-000000001001",
+  "user_id": "11111111-1111-1111-1111-111111111111",
+  "required_skills": ["Workflow automation", "Dashboard reporting", "Vendor coordination", "Excel"],
+  "user_skills": ["Excel", "Stakeholder communication", "Process documentation", "Email", "Scheduling"],
+  "missing_skills": ["Workflow automation", "Dashboard reporting", "Vendor coordination"],
+  "matched_skills": ["Excel"]
+}

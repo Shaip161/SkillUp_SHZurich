@@ -1,0 +1,66 @@
+{
+  "user_id": "11111111-1111-1111-1111-111111111111",
+  "candidate_profile": {
+    "name": "Mia Keller",
+    "current_role": "Operations Coordinator",
+    "seniority": "mid",
+    "years_experience": 4,
+    "location": "Zurich, CH",
+    "industry_background": "Logistics & supply chain operations",
+    "skills": [
+      "Excel",
+      "Stakeholder communication",
+      "Process documentation",
+      "Email",
+      "Scheduling"
+    ],
+    "languages": ["English", "German"]
+  },
+  "matches": [
+    {
+      "job": {
+        "id": "aaaaaaaa-0000-0000-0000-000000001001",
+        "title": "Operations Analyst",
+        "company": "NordLogix AG",
+        "location": "Zurich, CH",
+        "category": "Logistics",
+        "seniority": "mid",
+        "required_skills": ["Workflow automation", "Dashboard reporting", "Vendor coordination", "Excel"],
+        "redirect_url": "https://example.com/jobs/adz-1001"
+      },
+      "score": 0.88,
+      "matched_skills": ["Excel"],
+      "missing_skills": ["Workflow automation", "Dashboard reporting", "Vendor coordination"]
+    },
+    {
+      "job": {
+        "id": "aaaaaaaa-0000-0000-0000-000000001002",
+        "title": "Process Operations Analyst",
+        "company": "HelvetiaOps",
+        "location": "Zug, CH",
+        "category": "Operations",
+        "seniority": "mid",
+        "required_skills": ["Workflow automation", "Dashboard reporting", "Kubernetes"],
+        "redirect_url": "https://example.com/jobs/adz-1002"
+      },
+      "score": 0.81,
+      "matched_skills": [],
+      "missing_skills": ["Workflow automation", "Dashboard reporting", "Kubernetes"]
+    },
+    {
+      "job": {
+        "id": "aaaaaaaa-0000-0000-0000-000000001003",
+        "title": "Supply Chain Operations Specialist",
+        "company": "AlpTransit Co",
+        "location": "Bern, CH",
+        "category": "Supply Chain",
+        "seniority": "mid",
+        "required_skills": ["Vendor coordination", "Workflow automation", "Stakeholder communication"],
+        "redirect_url": "https://example.com/jobs/adz-1003"
+      },
+      "score": 0.76,
+      "matched_skills": ["Stakeholder communication"],
+      "missing_skills": ["Vendor coordination", "Workflow automation"]
+    }
+  ]
+}
